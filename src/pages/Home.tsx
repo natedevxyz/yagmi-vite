@@ -1,4 +1,4 @@
-import { LandingCard } from '../components/Home';
+import LandingCard from '../components/Home/LandingCard';
 import { Header, Footer } from '../components';
 import successImg from '../assets/images/success.png';
 import certificateImg from '../assets/images/certificate.png';
