@@ -2,8 +2,14 @@ import LandingCard from '../components/Home/LandingCard';
 import { Header, Footer } from '../components';
 import successImg from '../assets/images/success.png';
 import certificateImg from '../assets/images/certificate.png';
+import { useContext } from 'react';
+import SessionContext from '../context/user-session';
 
 export default function Home() {
+	const session = useContext(SessionContext);
+
+	console.log(session.isLoggedIn);
+
 	return (
 		<div className="flex flex-col items-center min-w-full min-h-screen relative z-50 ">
 			<div className="top-0 left-0 absolute z-0">
