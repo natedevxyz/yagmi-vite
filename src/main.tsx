@@ -8,6 +8,7 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { polygonMumbai } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { SessionContextProvider } from './context/user-session';
 
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
@@ -35,7 +36,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<WagmiConfig config={wagmiConfig}>
 			<RainbowKitProvider chains={chains}>
-				<Home />
+				<SessionContextProvider>
+					<Home />
+				</SessionContextProvider>
 			</RainbowKitProvider>
 		</WagmiConfig>
 	</React.StrictMode>
