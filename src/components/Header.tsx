@@ -15,7 +15,7 @@ export default function Header() {
 		>
 			<h3 className="text-2xl font-chromate ml-1">YAGMI</h3>
 			<div className="flex items-center">
-				{session.isLoggedIn && !location.pathname.includes('profile') && (
+				{session?.isLoggedIn && !location.pathname.includes('profile') && (
 					<Link
 						to={`profile/${session.userId}`}
 						className="mr-3 text-lg hover:underline font-medium"

@@ -6,7 +6,7 @@ import SessionContext from '../context/user-session';
 export default function UserProfile() {
 	const session = useContext(SessionContext);
 
-	if (!session.isLoggedIn) {
+	if (!session?.isLoggedIn) {
 		return <Navigate to="/" />;
 	}
 
