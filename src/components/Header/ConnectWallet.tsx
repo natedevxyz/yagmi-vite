@@ -38,7 +38,7 @@ export default function CustomConnect() {
 									<button
 										onClick={openConnectModal}
 										type="button"
-										className="font-work font-medium border-black border-[1px] rounded-lg px-4 py-1 text-white bg-black"
+										className="font-medium border-black border-[1px] rounded-lg px-3 py-0.5 text-lg bg-white"
 									>
 										Connect Wallet
 									</button>
@@ -50,7 +50,7 @@ export default function CustomConnect() {
 									<button
 										onClick={openChainModal}
 										type="button"
-										className="font-work font-medium border-black border-[1px] rounded-lg px-4 py-1 text-white bg-black"
+										className="font-medium border-black border-[1px] rounded-lg px-3 py-0.5 text-lg bg-white"
 									>
 										{String.fromCodePoint(0x270b)} Wrong network
 									</button>
@@ -88,7 +88,7 @@ export default function CustomConnect() {
 									<button
 										onClick={openAccountModal}
 										type="button"
-										className="font-work font-medium border-black border-[1px] rounded-lg px-4 py-1 text-white bg-black"
+										className="font-medium border-black border-[1px] rounded-lg px-3 py-0.5 text-lg bg-white"
 									>
 										{account.displayName}
 									</button>
