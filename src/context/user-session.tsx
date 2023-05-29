@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import { mainnet } from 'viem/chains';
 
@@ -13,6 +13,7 @@ interface SessionContextType {
 	userId: string;
 	ensName: string;
 	ensAvatar: string;
+	disconnect: () => void;
 }
 
 const SessionContext = createContext<SessionContextType | null>(null);
@@ -27,8 +28,12 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 		onDisconnect() {
 			setIsLoggedIn(false);
 			setUserId('');
+			setEnsName('');
+			setEnsAvatar('');
 		},
 	});
+
+	const { disconnect } = useDisconnect();
 
 	useEffect(() => {
 		if (address) {
@@ -62,6 +67,7 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 				userId,
 				ensName,
 				ensAvatar,
+				disconnect,
 			}}
 		>
 			{children}

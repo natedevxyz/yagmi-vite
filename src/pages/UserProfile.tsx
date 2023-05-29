@@ -1,10 +1,11 @@
 import { Link, Navigate } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
+	const [avatarLoaded, setAvatarLoaded] = useState(false);
 
 	if (!session?.isLoggedIn) {
 		return <Navigate to="/" />;
@@ -19,7 +20,23 @@ export default function UserProfile() {
 				</div>
 			</Link>
 			<div className="min-w-[80%]">
-				<div className="bg-yagmi-yellow w-[14rem] h-[14rem] rounded-xl mb-7"></div>
+				<div className="bg-yagmi-yellow w-[14rem] h-[14rem] rounded-xl mb-7 p-4 overflow-hidden relative">
+					<div className="w-full h-full rounded-xl bg-black">
+						<img
+							src={session.ensAvatar}
+							alt="ENS avatar"
+							onLoad={() => setAvatarLoaded(true)}
+							className={`w-full h-full rounded-xl object-cover ${
+								!avatarLoaded && 'hidden'
+							}`}
+						/>
+					</div>
+					{session.ensName && (
+						<span className="absolute bg-white bottom-5 left-1/2 transform -translate-x-1/2 font-medium pb-0.5 px-3 rounded-3xl border-black border-2">
+							{session.ensName}
+						</span>
+					)}
+				</div>
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl py-4 px-8">
 				<h2 className="text-4xl text-white self-end">My NFTs</h2>
