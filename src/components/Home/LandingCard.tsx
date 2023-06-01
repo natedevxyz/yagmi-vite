@@ -20,7 +20,7 @@ export default function LandingCard({
 			className={`bg-[#EBF7FE] rounded-2xl flex justify-between pl-8 pr-4 py-4 w-[34rem] h-[18rem] ${className}`}
 		>
 			<div className="max-w-[50%] flex flex-col justify-around">
-				<h3 className="font-work text-4xl font-semibold">{title}</h3>
+				<h3 className="text-4xl font-semibold">{title}</h3>
 				<p className="max-w-[60%] mb-4 leading-5">{text}</p>
 				<ActionButton href="/" className="px-7 py-1 self-start text-lg mb-2">
 					{btnText}
