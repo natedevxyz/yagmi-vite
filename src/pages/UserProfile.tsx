@@ -1,4 +1,4 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
@@ -6,6 +6,7 @@ import SessionContext from '../context/user-session';
 export default function UserProfile() {
 	const session = useContext(SessionContext);
 	const [avatarLoaded, setAvatarLoaded] = useState(false);
+	const collection = useLoaderData() as Array<any>;
 
 	if (!session?.isLoggedIn) {
 		return <Navigate to="/" />;
@@ -40,23 +41,33 @@ export default function UserProfile() {
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl py-4 px-8">
 				<h2 className="text-4xl text-white self-end">My NFTs</h2>
-				<div className="flex flex-col mt-10">
-					<h3 className="text-[#717171] text-3xl font-medium mb-1">
-						Nothing here yet...
-					</h3>
-					<h3 className="text-[#717171] text-3xl font-medium mb-1">
-						Support a champion now!
-					</h3>
-					<Link to="/" className="self-start">
-						<div className="flex items-center text-yagmi-pink hover:underline mt-1">
-							Go to marketplace
-							<ArrowRightIcon
-								height="1.2rem"
-								width="1.2rem"
-								className="ml-1 pt-0.5"
-							/>
+				<div className="flex space-x-5 mt-2">
+					{collection.length > 0 ? (
+						collection.map((nft: any) => (
+							<div key={nft.collectionTokenId}>
+								<img src={nft.imageUrl} className="max-h-[30vh] rounded-xl" />
+							</div>
+						))
+					) : (
+						<div className="flex flex-col mt-10">
+							<h3 className="text-[#717171] text-3xl font-medium mb-1">
+								Nothing here yet...
+							</h3>
+							<h3 className="text-[#717171] text-3xl font-medium mb-1">
+								Support a champion now!
+							</h3>
+							<Link to="/" className="self-start">
+								<div className="flex items-center text-yagmi-pink hover:underline mt-1">
+									Go to marketplace
+									<ArrowRightIcon
+										height="1.2rem"
+										width="1.2rem"
+										className="ml-1 pt-0.5"
+									/>
+								</div>
+							</Link>
 						</div>
-					</Link>
+					)}
 				</div>
 			</div>
 		</>

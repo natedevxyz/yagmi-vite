@@ -58,7 +58,7 @@ export default function CustomConnect() {
 										type="button"
 										className="font-medium border-black border-[1px] rounded-lg px-3 py-0.5 text-lg bg-white"
 									>
-										{String.fromCodePoint(0x270b)} Wrong network
+										{String.fromCodePoint(0x270b)}Wrong network
 									</button>
 								);
 							}
