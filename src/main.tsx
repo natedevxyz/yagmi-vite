@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { Home, UserProfile } from './pages';
+import { ChampionProfile, Home, UserProfile } from './pages';
 import { Header } from './components';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
@@ -16,7 +16,7 @@ import {
 	Outlet,
 	LoaderFunctionArgs,
 } from 'react-router-dom';
-import { checkNftsByUser } from './utils';
+import { checkNftsByUser, supabaseClient } from './utils';
 
 const apiKey = import.meta.env.VITE_ALCHEMY_KEY;
 const projectId = import.meta.env.VITE_PROJECT_ID;
@@ -53,13 +53,30 @@ const router = createBrowserRouter([
 				loader: async ({ params }: LoaderFunctionArgs) => {
 					const nfts = await checkNftsByUser({ userId: params.userId });
 
-					const collection = nfts.result.assets.filter(
+					const collection = nfts.ownedNfts.filter(
 						(nft: any) =>
-							nft.collectionAddress ==
-							'0x5066c0934632bcc2902d139d7c875cbd295429f8'
+							nft.contract.address ==
+							'0x7582177f9e536ab0b6c721e11f383c326f2ad1d5'
 					);
 
 					return collection;
+				},
+			},
+			{
+				path: 'marketplace/:championId',
+				element: <ChampionProfile />,
+				loader: async ({ params }: LoaderFunctionArgs) => {
+					const championData = await supabaseClient
+						.from('champions')
+						.select()
+						.eq('id', params.championId);
+
+					const championMilestones = await supabaseClient
+						.from('milestones')
+						.select()
+						.eq('champion_id', params.championId);
+
+					return { championData, championMilestones };
 				},
 			},
 		],

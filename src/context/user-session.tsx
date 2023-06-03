@@ -11,9 +11,10 @@ const client = createPublicClient({
 interface SessionContextType {
 	isLoggedIn: boolean;
 	userId: string;
-	ensName: string;
-	ensAvatar: string;
+	ensName: string | null;
+	ensAvatar: string | null;
 	disconnect: () => void;
+	isLoading: boolean;
 }
 
 const SessionContext = createContext<SessionContextType | null>(null);
@@ -21,8 +22,9 @@ const SessionContext = createContext<SessionContextType | null>(null);
 export function SessionContextProvider({ children }: { children: ReactNode }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [userId, setUserId] = useState('');
-	const [ensName, setEnsName] = useState('');
-	const [ensAvatar, setEnsAvatar] = useState('');
+	const [ensName, setEnsName] = useState<string | null>('');
+	const [ensAvatar, setEnsAvatar] = useState<string | null>('');
+	const [isLoading, setIsLoading] = useState(true);
 
 	const { address } = useAccount({
 		onDisconnect() {
@@ -39,24 +41,43 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 		if (address) {
 			setIsLoggedIn(true);
 			setUserId(address);
-			client
-				.getEnsName({
-					address,
-				})
-				.then(ensName => {
-					if (ensName) {
-						setEnsName(ensName);
-						client
-							.getEnsAvatar({
-								name: ensName,
-							})
-							.then(ensAvatar => {
-								if (ensAvatar) {
-									setEnsAvatar(ensAvatar);
-								}
-							});
+
+			const fetchEnsName = async () => {
+				try {
+					const ensNameResponse: string | null = await client.getEnsName({
+						address,
+					});
+					setEnsName(ensNameResponse);
+					return ensNameResponse;
+				} catch (error) {
+					console.error('Failed to get ENS name:', error);
+				}
+			};
+
+			const fetchEnsAvatar = async (ensName: string | null) => {
+				if (ensName) {
+					try {
+						const ensAvatarResponse: string | null = await client.getEnsAvatar({
+							name: ensName,
+						});
+						setEnsAvatar(ensAvatarResponse);
+					} catch (error) {
+						console.error('Failed to get ENS avatar:', error);
 					}
+				}
+			};
+
+			fetchEnsName().then(ensNameResponse => {
+				fetchEnsAvatar(ensNameResponse!).finally(() => {
+					setIsLoading(false);
 				});
+			});
+		} else {
+			setIsLoggedIn(false);
+			setUserId('');
+			setEnsName('');
+			setEnsAvatar('');
+			setIsLoading(false);
 		}
 	}, [address]);
 
@@ -68,6 +89,7 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 				ensName,
 				ensAvatar,
 				disconnect,
+				isLoading,
 			}}
 		>
 			{children}

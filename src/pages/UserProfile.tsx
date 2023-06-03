@@ -2,11 +2,16 @@ import { Link, Navigate, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
+import { Loading } from '../components';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
 	const [avatarLoaded, setAvatarLoaded] = useState(false);
 	const collection = useLoaderData() as Array<any>;
+
+	if (session?.isLoading) {
+		return <Loading />;
+	}
 
 	if (!session?.isLoggedIn) {
 		return <Navigate to="/" />;
@@ -24,7 +29,7 @@ export default function UserProfile() {
 				<div className="bg-yagmi-yellow w-[14rem] h-[14rem] rounded-xl mb-7 p-4 overflow-hidden relative">
 					<div className="w-full h-full rounded-xl bg-black">
 						<img
-							src={session.ensAvatar}
+							src={session.ensAvatar!}
 							alt="ENS avatar"
 							onLoad={() => setAvatarLoaded(true)}
 							className={`w-full h-full rounded-xl object-cover ${
@@ -44,8 +49,11 @@ export default function UserProfile() {
 				<div className="flex space-x-5 mt-2">
 					{collection.length > 0 ? (
 						collection.map((nft: any) => (
-							<div key={nft.collectionTokenId}>
-								<img src={nft.imageUrl} className="max-h-[30vh] rounded-xl" />
+							<div key={nft.id.tokenId}>
+								<img
+									src={nft.media[0].gateway}
+									className="max-h-[30vh] rounded-xl"
+								/>
 							</div>
 						))
 					) : (
