@@ -74,9 +74,15 @@ const router = createBrowserRouter([
 					const championMilestones = await supabaseClient
 						.from('milestones')
 						.select()
+						.eq('champion_id', params.championId)
+						.order('deadline', { ascending: true });
+
+					const championAchievement = await supabaseClient
+						.from('achievements')
+						.select()
 						.eq('champion_id', params.championId);
 
-					return { championData, championMilestones };
+					return { championData, championMilestones, championAchievement };
 				},
 			},
 		],

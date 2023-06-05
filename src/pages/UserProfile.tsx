@@ -44,9 +44,9 @@ export default function UserProfile() {
 					)}
 				</div>
 			</div>
-			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl py-4 px-8">
-				<h2 className="text-4xl text-white self-end">My NFTs</h2>
-				<div className="flex space-x-5 mt-2">
+			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">
+				<h2 className="text-4xl text-white self-end mr-4">My NFTs</h2>
+				<div className="flex space-x-4 mt-2">
 					{collection.length > 0 ? (
 						collection.map((nft: any) => (
 							<div key={nft.id.tokenId}>
@@ -57,7 +57,7 @@ export default function UserProfile() {
 							</div>
 						))
 					) : (
-						<div className="flex flex-col mt-10">
+						<div className="flex flex-col mt-10 ml-4">
 							<h3 className="text-[#717171] text-3xl font-medium mb-1">
 								Nothing here yet...
 							</h3>

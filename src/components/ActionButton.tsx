@@ -3,14 +3,14 @@ export default function ActionButton({
 	className,
 	children,
 }: {
-	href: string;
+	href?: string;
 	className?: string;
 	children: React.ReactNode;
 }) {
 	return (
 		<a
 			href={href}
-			className={`bg-primary font-medium shadow-[0.2rem_0.2rem_black] rounded-sm transition duration-200 ease-in-out transform hover:shadow-sm hover:translate-y-1 ${className} `}
+			className={`bg-yagmi-pink font-medium shadow-[0.3rem_0.4rem_white] border-black border-[1px] transition duration-200 ease-in-out transform hover:shadow-sm hover:translate-y-1 hover:cursor-pointer text-black ${className} `}
 		>
 			{children}
 		</a>
