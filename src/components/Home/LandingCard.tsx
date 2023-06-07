@@ -1,18 +1,21 @@
 import ActionButton from '../ActionButton';
 import SvgCircle from './svgCircle';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 export default function LandingCard({
 	title,
 	text,
 	btnText,
 	circleColor,
+	href,
 	className,
 }: {
 	title: string;
 	text: string;
 	btnText: string;
 	circleColor: string;
+	href: string;
 	className?: string;
 }) {
 	return (
@@ -29,13 +32,12 @@ export default function LandingCard({
 				<p className="text-white max-w-[60%] mb-4 leading-5 text-sm text-right">
 					{text}
 				</p>
-				<ActionButton
-					href="/"
-					className="flex items-center px-7 py-1 text-lg mb-2"
-				>
-					{btnText}
-					<ArrowRightIcon width="1rem" height="1rem" className="ml-2" />
-				</ActionButton>
+				<Link to={href}>
+					<ActionButton className="flex items-center px-7 py-1 text-lg mb-2">
+						{btnText}
+						<ArrowRightIcon width="1rem" height="1rem" className="ml-2" />
+					</ActionButton>
+				</Link>
 			</div>
 		</div>
 	);

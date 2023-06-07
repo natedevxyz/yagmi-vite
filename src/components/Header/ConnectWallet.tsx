@@ -109,7 +109,7 @@ export default function CustomConnect() {
 													<Menu.Item>
 														{({ active }) => (
 															<Link
-																to={`profile/${session?.userId}`}
+																to={`profile/${session?.userAddress}`}
 																className={`${
 																	active
 																		? 'text-lg hover:font-medium'

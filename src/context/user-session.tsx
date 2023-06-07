@@ -10,7 +10,7 @@ const client = createPublicClient({
 
 interface SessionContextType {
 	isLoggedIn: boolean;
-	userId: string;
+	userAddress: string;
 	ensName: string | null;
 	ensAvatar: string | null;
 	disconnect: () => void;
@@ -21,7 +21,7 @@ const SessionContext = createContext<SessionContextType | null>(null);
 
 export function SessionContextProvider({ children }: { children: ReactNode }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [userId, setUserId] = useState('');
+	const [userAddress, setUserAddress] = useState('');
 	const [ensName, setEnsName] = useState<string | null>('');
 	const [ensAvatar, setEnsAvatar] = useState<string | null>('');
 	const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 	const { address } = useAccount({
 		onDisconnect() {
 			setIsLoggedIn(false);
-			setUserId('');
+			setUserAddress('');
 			setEnsName('');
 			setEnsAvatar('');
 		},
@@ -40,7 +40,7 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 	useEffect(() => {
 		if (address) {
 			setIsLoggedIn(true);
-			setUserId(address);
+			setUserAddress(address);
 
 			const fetchEnsName = async () => {
 				try {
@@ -74,7 +74,7 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 			});
 		} else {
 			setIsLoggedIn(false);
-			setUserId('');
+			setUserAddress('');
 			setEnsName('');
 			setEnsAvatar('');
 			setIsLoading(false);
@@ -85,7 +85,7 @@ export function SessionContextProvider({ children }: { children: ReactNode }) {
 		<SessionContext.Provider
 			value={{
 				isLoggedIn,
-				userId,
+				userAddress,
 				ensName,
 				ensAvatar,
 				disconnect,

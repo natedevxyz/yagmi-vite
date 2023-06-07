@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { ChampionProfile, Home, UserProfile } from './pages';
-import { Header } from './components';
+import { ChampionProfile, Home, UserProfile, Marketplace } from './pages';
+import { Header, Loading } from './components';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
@@ -15,6 +15,7 @@ import {
 	RouterProvider,
 	Outlet,
 	LoaderFunctionArgs,
+	useNavigation,
 } from 'react-router-dom';
 import { checkNftsByUser, supabaseClient } from './utils';
 
@@ -48,10 +49,12 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: 'profile/:userId',
+				path: 'profile/:userAddress',
 				element: <UserProfile />,
 				loader: async ({ params }: LoaderFunctionArgs) => {
-					const nfts = await checkNftsByUser({ userId: params.userId });
+					const nfts = await checkNftsByUser({
+						userAddress: params.userAddress,
+					});
 
 					const collection = nfts.ownedNfts.filter(
 						(nft: any) =>
@@ -60,6 +63,22 @@ const router = createBrowserRouter([
 					);
 
 					return collection;
+				},
+			},
+			{
+				path: 'marketplace',
+				element: <Marketplace />,
+				loader: async () => {
+					const daos = await supabaseClient.from('daos').select(`
+					id,
+					name,
+					address,
+					description,
+					website_url,
+					champions(id, name, avatar_url)
+					`);
+
+					return daos;
 				},
 			},
 			{
@@ -90,10 +109,12 @@ const router = createBrowserRouter([
 ]);
 
 function Root() {
+	const navigation = useNavigation();
+
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-[#1D1D1D]">
 			<Header />
-			<Outlet />
+			{navigation.state === 'loading' ? <Loading /> : <Outlet />}
 		</div>
 	);
 }

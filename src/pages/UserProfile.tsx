@@ -19,14 +19,14 @@ export default function UserProfile() {
 
 	return (
 		<>
-			<Link to="/" className="ml-[10%] self-start mb-4">
+			<Link to="/marketplace" className="ml-[10%] self-start mb-4">
 				<div className="flex items-center text-white text-lg hover:underline">
 					<ArrowLeftIcon height="1rem" width="1rem" className="mr-1" />
 					Back
 				</div>
 			</Link>
-			<div className="min-w-[80%]">
-				<div className="bg-yagmi-yellow w-[14rem] h-[14rem] rounded-xl mb-7 p-4 overflow-hidden relative">
+			<div className="flex min-w-[80%] mb-7">
+				<div className="bg-yagmi-yellow w-[14rem] h-[14rem] rounded-xl p-4 overflow-hidden relative">
 					<div className="w-full h-full rounded-xl bg-black">
 						<img
 							src={session.ensAvatar!}
@@ -43,19 +43,35 @@ export default function UserProfile() {
 						</span>
 					)}
 				</div>
+				<div className="flex flex-col ml-10">
+					<h1 className="text-white font-semibold text-2xl mb-1">
+						Account Address
+					</h1>
+					<span className="text-[#717171] text-lg">{session.userAddress}</span>
+				</div>
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">
 				<h2 className="text-4xl text-white self-end mr-4">My NFTs</h2>
-				<div className="flex space-x-4 mt-2">
+				<div className="flex justify-between">
 					{collection.length > 0 ? (
-						collection.map((nft: any) => (
-							<div key={nft.id.tokenId}>
-								<img
-									src={nft.media[0].gateway}
-									className="max-h-[30vh] rounded-xl"
-								/>
+						<>
+							<div className="flex space-x-4 mt-2">
+								{collection.slice(0, 4).map((nft: any) => (
+									<div key={nft.id.tokenId}>
+										<img
+											src={nft.media[0].gateway}
+											className="max-h-[30vh] rounded-xl"
+										/>
+									</div>
+								))}
 							</div>
-						))
+							<div className="flex flex-col justify-end">
+								<button className="text-white flex items-center mr-4">
+									See all
+									<ArrowRightIcon width="1rem" height="1rem" className="ml-1" />
+								</button>
+							</div>
+						</>
 					) : (
 						<div className="flex flex-col mt-10 ml-4">
 							<h3 className="text-[#717171] text-3xl font-medium mb-1">

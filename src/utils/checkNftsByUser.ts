@@ -1,9 +1,9 @@
 const apiKey = import.meta.env.VITE_ALCHEMY_KEY;
 
 export default async function checkNftsByUser({
-	userId,
+	userAddress,
 }: {
-	userId: string | undefined;
+	userAddress: string | undefined;
 }) {
 	let requestOptions = {
 		method: 'GET',
@@ -11,7 +11,7 @@ export default async function checkNftsByUser({
 	} as RequestInit;
 
 	const res = await fetch(
-		`https://polygon-mumbai.g.alchemy.com/nft/v2/${apiKey}/getNFTs/?owner=${userId}`,
+		`https://polygon-mumbai.g.alchemy.com/nft/v2/${apiKey}/getNFTs/?owner=${userAddress}`,
 		requestOptions
 	);
 
