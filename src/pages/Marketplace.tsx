@@ -22,11 +22,16 @@ export default function Marketplace() {
 					key={dao.id}
 					className="flex w-[80%] min-h-[46vh] border-[1px] border-white rounded-2xl py-8 justify-between mb-7"
 				>
-					<div className="flex flex-col justify-between pl-8 w-[30%]">
+					<div className="flex flex-col justify-between px-8 w-[35%]">
 						<div>
-							<h2 className="text-white font-medium text-4xl mb-6">
-								{dao.name}
-							</h2>
+							<div className="flex items-center mb-6">
+								<img
+									src={dao.logo_url}
+									alt="DAO logo"
+									className="h-[2rem] w-[2rem] rounded-full mr-2"
+								/>
+								<h2 className="text-white font-medium text-4xl">{dao.name}</h2>
+							</div>
 							<p className="text-[#717171] text-lg">{dao.description}</p>
 						</div>
 						<a
@@ -41,7 +46,7 @@ export default function Marketplace() {
 							/>
 						</a>
 					</div>
-					<div className="flex flex-col min-w-[70%] justify-between">
+					<div className="flex flex-col min-w-[65%] justify-between">
 						<button className="text-white flex items-center mr-8 mb-4 self-end">
 							See all champions
 							<ArrowRightIcon width="1rem" height="1rem" className="ml-1" />
@@ -53,11 +58,11 @@ export default function Marketplace() {
 									key={champion.id}
 									className="flex justify-center min-h-[15rem] max-h-[15rem] min-w-[15rem] max-w-[15rem] overflow-hidden relative"
 								>
-									<div className="w-full h-full bg-black">
+									<div className="w-full h-full">
 										<img
 											src={champion.avatar_url}
 											alt="Champion avatar"
-											className="w-full h-full object-cover"
+											className="w-full h-full object-cover rounded-lg p-1 hover:bg-gray-50"
 										/>
 									</div>
 									<span className="absolute bg-white bottom-3 left-1/2 transform -translate-x-1/2 font-medium pb-0.5 px-3 rounded-3xl border-black border-2">

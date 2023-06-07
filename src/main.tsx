@@ -75,6 +75,7 @@ const router = createBrowserRouter([
 					address,
 					description,
 					website_url,
+					logo_url,
 					champions(id, name, avatar_url)
 					`);
 

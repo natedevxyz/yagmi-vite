@@ -10,8 +10,9 @@ export default {
 			colors: {
 				'yagmi-pink': '#FF97D6',
 				'yagmi-blue': '#3030D0',
-				'yagmi-yellow': '#FFC501',
+				'yagmi-yellow': '#FFC602',
 				'yagmi-aqua': '#00DEB5',
+				'yagmi-red': '#FF4B00',
 			},
 		},
 	},
