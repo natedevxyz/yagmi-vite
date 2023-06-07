@@ -1,7 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { ChampionProfile, Home, UserProfile, Marketplace } from './pages';
+import {
+	ChampionProfile,
+	Home,
+	UserProfile,
+	Marketplace,
+	Dashboard,
+} from './pages';
 import { Header, Loading } from './components';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
@@ -103,6 +109,25 @@ const router = createBrowserRouter([
 						.eq('champion_id', params.championId);
 
 					return { championData, championMilestones, championAchievement };
+				},
+			},
+			{
+				path: 'dashboard/:daoAddress',
+				element: <Dashboard />,
+				loader: async ({ params }: LoaderFunctionArgs) => {
+					const dao = await supabaseClient
+						.from('daos')
+						.select(
+							`
+					name,
+					address,
+					logo_url,
+					champions(id, name, address, token_id)
+					`
+						)
+						.eq('address', params.daoAddress);
+
+					return dao;
 				},
 			},
 		],

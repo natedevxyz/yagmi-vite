@@ -27,7 +27,7 @@ export default function Home() {
 						text="Ready to change someone's life? Start the loan process here"
 						btnText="DAO Dashboard"
 						circleColor="#00DEB5"
-						href="/"
+						href="/dashboard/0x85317a021541263540bFe56A665239Db71e17026"
 					/>
 				</div>
 			</main>

@@ -33,7 +33,7 @@ export default function ChampionProfile() {
 						alt="Avatar"
 						className="w-full h-full rounded-xl object-cover"
 					/>
-					<span className="absolute bg-white bottom-5 left-1/2 transform -translate-x-1/2 font-medium pb-0.5 px-3 rounded-3xl border-black border-2">
+					<span className="absolute bg-white bottom-5 left-1/2 transform -translate-x-1/2 font-medium pb-0.5 px-3 rounded-3xl border-black border-2 whitespace-nowrap">
 						{query.championData.data[0].name}
 					</span>
 				</div>
@@ -65,7 +65,7 @@ export default function ChampionProfile() {
 								<ArrowRightIcon height="1rem" width="1rem" className="ml-2" />
 							</a>
 						</div>
-						<ActionButton className="px-6 py-1 mr-4 mb-1">
+						<ActionButton className="px-6 py-1 mr-6 mb-2">
 							Buy NFT now!
 						</ActionButton>
 					</div>

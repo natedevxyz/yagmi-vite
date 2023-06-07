@@ -44,7 +44,9 @@ export default function UserProfile() {
 					)}
 				</div>
 				<div className="flex flex-col ml-10">
-					<h1 className="text-white font-medium text-2xl mb-1">Your Wallet</h1>
+					<h1 className="text-white font-chromate text-3xl mb-1">
+						Your Wallet
+					</h1>
 					<span className="text-[#717171] text-lg">{session.userAddress}</span>
 				</div>
 			</div>
