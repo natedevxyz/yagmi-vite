@@ -4,8 +4,6 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 export default function Marketplace() {
 	const query = useLoaderData() as any;
 
-	console.log(query);
-
 	return (
 		<>
 			<div className="flex flex-col items-center my-10">
