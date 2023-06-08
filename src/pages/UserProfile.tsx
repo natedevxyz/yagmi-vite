@@ -5,6 +5,7 @@ import SessionContext from '../context/user-session';
 import { Loading } from '../components';
 import { useBalance } from 'wagmi';
 import maticLogo from '../assets/icons/matic.svg';
+import usdcLogo from '../assets/icons/usdc.svg';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
@@ -12,6 +13,10 @@ export default function UserProfile() {
 	const collection = useLoaderData() as Array<any>;
 	const { data: matic } = useBalance({
 		address: session?.userAddress as `0x${string}`,
+	});
+	const { data: fusdc } = useBalance({
+		address: session?.userAddress as `0x${string}`,
+		token: '0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
 	});
 
 	if (session?.isLoading) {
@@ -56,8 +61,15 @@ export default function UserProfile() {
 					<div className="flex items-center mt-4">
 						<img src={maticLogo} alt="MATIC logo" className="w-5 h-5 mr-2" />
 						<span className="text-white text-xl">
-							{matic?.formatted.slice(0, 4)}{' '}
+							{Number(matic?.formatted).toFixed(2)}{' '}
 							<span className="text-[#717171]">MATIC</span>
+						</span>
+					</div>
+					<div className="flex items-center mt-1">
+						<img src={usdcLogo} alt="MATIC logo" className="w-5 h-5 mr-2" />
+						<span className="text-white text-xl">
+							{Number(fusdc?.formatted).toFixed(2)}{' '}
+							<span className="text-[#717171]">fUSDC</span>
 						</span>
 					</div>
 				</div>
