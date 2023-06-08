@@ -51,14 +51,14 @@ export default function ChampionProfile() {
 					<div className="flex justify-between">
 						<div className="flex">
 							<a
-								href={query.championData.data[0].linkedin_url || '/'}
+								href={query.championData.data[0].linkedin_url}
 								className="text-white flex items-center hover:cursor-pointer border-yagmi-pink border-2 rounded-lg px-3 py-0.5"
 							>
 								LinkedIn
 								<ArrowRightIcon height="1rem" width="1rem" className="ml-2" />
 							</a>
 							<a
-								href={query.championData.data[0].twitter_url || '/'}
+								href={query.championData.data[0].twitter_url}
 								className="text-white flex items-center hover:cursor-pointer border-yagmi-pink border-2 rounded-lg px-3 py-0.5 ml-4"
 							>
 								Twitter
@@ -99,7 +99,7 @@ export default function ChampionProfile() {
 					</button>
 				</div>
 			</div>
-			<div className="flex min-w-[80%] h-[40vh] border-[1px] border-white rounded-2xl py-4 px-4 justify-between mb-7">
+			<div className="flex w-[80%] h-[40vh] border-[1px] border-white rounded-2xl py-4 px-4 justify-between mb-7">
 				<div className="flex flex-col m-4 justify-between">
 					<div className="flex flex-col">
 						<h2 className="text-4xl text-white font-semibold mb-2">
@@ -122,10 +122,10 @@ export default function ChampionProfile() {
 						)}
 					</div>
 				</div>
-				<div className="w-[75%] min-h-full rounded-xl bg-black relative">
+				<div className="min-w-[60%] min-h-full rounded-xl bg-black relative">
 					<a
-						href=""
-						className="bg-yagmi-pink absolute bottom-7 right-10 z-20 py-2 px-8 font-medium border-black border-2"
+						href={undefined}
+						className="bg-yagmi-pink absolute bottom-7 right-10 z-20 py-2 px-8 font-medium border-black border-2 hover:cursor-pointer"
 					>
 						Visit project
 					</a>

@@ -13,8 +13,8 @@ export default function Marketplace() {
 					\\ Explore the Marketplace \\
 				</h1>
 				<p className="text-[#717171] text-xl max-w-[60%] text-center">
-					Harness the power of your community using DeFi to empower talent
-					within and change the financial paradigm.
+					Here is where community and opportunity intersect, a manifestation of
+					the collective power of crowdfunding backed by smart contracts
 				</p>
 			</div>
 			{query.data.map((dao: any) => (

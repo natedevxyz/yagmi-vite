@@ -3,11 +3,16 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
 import { Loading } from '../components';
+import { useBalance } from 'wagmi';
+import maticLogo from '../assets/icons/matic.svg';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
 	const [avatarLoaded, setAvatarLoaded] = useState(false);
 	const collection = useLoaderData() as Array<any>;
+	const { data: matic } = useBalance({
+		address: session?.userAddress as `0x${string}`,
+	});
 
 	if (session?.isLoading) {
 		return <Loading />;
@@ -48,6 +53,13 @@ export default function UserProfile() {
 						Your Wallet
 					</h1>
 					<span className="text-[#717171] text-lg">{session.userAddress}</span>
+					<div className="flex items-center mt-4">
+						<img src={maticLogo} alt="MATIC logo" className="w-5 h-5 mr-2" />
+						<span className="text-white text-xl">
+							{matic?.formatted.slice(0, 4)}{' '}
+							<span className="text-[#717171]">MATIC</span>
+						</span>
+					</div>
 				</div>
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">

@@ -34,14 +34,17 @@ export default function Dashboard() {
 						{query?.data[0].name}
 					</span>
 				</div>
-				<div className="flex flex-col ml-10 pr-20 py-3 justify-between">
+				<div className="flex flex-col ml-10 pr-5 py-2 justify-between">
 					<div className="flex flex-col">
 						<h1 className="text-white font-chromate text-4xl mb-2">
 							Propose a <span className="text-yagmi-aqua">champion</span>
 						</h1>
-						<p className="text-[#717171] text-xl">
-							A small description about the champion and his details with some
-							links pinned below. Added by the DAO while proposing a champion
+						<p className="text-[#717171] text-lg">
+							The collateral requirement for a loan is set at a 1:1 ratio for
+							this organization. The collateral needs to be available in the
+							organization's address when you initiate a proposal and IT WILL BE
+							LOCKED. Over time, as your champions successfully repay the loans,
+							the ratio of collateral required will decrease.
 						</p>
 					</div>
 					<ActionButton className="self-start px-7 py-1 text-lg mb-2">
@@ -49,10 +52,10 @@ export default function Dashboard() {
 					</ActionButton>
 				</div>
 			</div>
-			<h2 className="text-white font-chromate text-3xl self-start ml-[10%] mt-24 mb-12">
+			<h2 className="text-white font-chromate text-3xl self-start ml-[10%] mt-16 mb-10">
 				Manage Champions
 			</h2>
-			<div className="grid grid-cols-6 content-start min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl py-4 px-4 justify-between mb-7">
+			<div className="grid grid-cols-6 content-start min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl pt-4 pb-9 px-4 justify-between mb-7">
 				<h3 className="text-white font-medium text-xl text-center border-b-[1px] border-white max-h-[4rem] mt-5 pb-5">
 					Name
 				</h3>
@@ -73,12 +76,20 @@ export default function Dashboard() {
 				</h3>
 				{query.data[0].champions.map((champion: any) => (
 					<Fragment key={champion.id}>
-						<span className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4">
+						<Link
+							to={`/marketplace/${champion.id}`}
+							className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4 hover:cursor-pointer hover:underline"
+						>
 							{champion.name}
-						</span>
-						<span className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4">
-							{champion.name}
-						</span>
+						</Link>
+						<Link
+							to={`https://mumbai.polygonscan.com/address/${champion.address}`}
+							className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4 hover:cursor-pointer hover:underline"
+						>
+							{`${champion.address.slice(0, 4)}...${champion.address.slice(
+								-4
+							)}`}
+						</Link>
 						<span className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4">
 							{champion.name}
 						</span>

@@ -10,21 +10,21 @@ export default function Home() {
 						Crowdfunding with a sprinkle of DeFi
 					</h1>
 					<p className="text-white mb-8 text-lg max-w-[60%] text-center">
-						Harness the power of your community using DeFi to empower talent
-						within and change the financial paradigm.
+						Harness the power of your community with YAGMI, and unlock the
+						potential of your most talented members through DeFi
 					</p>
 				</div>
 				<div className="flex min-w-full justify-center space-x-5">
 					<LandingCard
 						title="Support a champion"
-						text="Select a DAO, get to know their champions and what they offer"
+						text="Choose a DAO, get to know their champions and what they offer"
 						btnText="Marketplace"
 						circleColor="#3030D0"
 						href="/marketplace"
 					/>
 					<LandingCard
 						title="Propose a champion"
-						text="Ready to change someone's life? Start the loan process here"
+						text="Ready to amplify your impact? Kickstart the process here"
 						btnText="DAO Dashboard"
 						circleColor="#00DEB5"
 						href="/dashboard/0x85317a021541263540bFe56A665239Db71e17026"
