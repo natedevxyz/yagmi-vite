@@ -6,7 +6,7 @@ import { Loading } from '../components';
 import { useBalance, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import maticLogo from '../assets/icons/matic.svg';
 import usdcLogo from '../assets/icons/usdc.svg';
-import fUsdcAbi from '../utils/fusdcAbi.json';
+import fUsdcAbi from '../utils/fUsdcAbi.json';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
