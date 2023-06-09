@@ -61,14 +61,20 @@ export default function UserProfile() {
 					<div className="flex items-center mt-4">
 						<img src={maticLogo} alt="MATIC logo" className="w-5 h-5 mr-2" />
 						<span className="text-white text-xl">
-							{Number(matic?.formatted).toFixed(2)}{' '}
+							{Number(matic?.formatted).toLocaleString('en', {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							})}{' '}
 							<span className="text-[#717171]">MATIC</span>
 						</span>
 					</div>
 					<div className="flex items-center mt-1">
 						<img src={usdcLogo} alt="MATIC logo" className="w-5 h-5 mr-2" />
 						<span className="text-white text-xl">
-							{Number(fusdc?.formatted).toFixed(2)}{' '}
+							{Number(fusdc?.formatted).toLocaleString('en', {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							})}{' '}
 							<span className="text-[#717171]">fUSDC</span>
 						</span>
 					</div>
