@@ -8,29 +8,42 @@ import maticLogo from '../assets/icons/matic.svg';
 import usdcLogo from '../assets/icons/usdc.svg';
 import fUsdcAbi from '../utils/fUsdcAbi.json';
 
+const contractAddress = '0xe25a838Bb996386eA450De3be2606b2f88eB408b';
+const erc20Address = '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE';
+
 export default function UserProfile() {
 	const session = useContext(SessionContext);
 	const [avatarLoaded, setAvatarLoaded] = useState(false);
 	const collection = useLoaderData() as Array<any>;
 	const { data: matic } = useBalance({
 		address: session?.userAddress as `0x${string}`,
+		watch: true,
 	});
 	const { data: fusdc } = useBalance({
 		address: session?.userAddress as `0x${string}`,
-		token: '0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
+		token: erc20Address,
+		watch: true,
 	});
 
-	const { config } = usePrepareContractWrite({
-		address: '0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
+	const { config: configMint } = usePrepareContractWrite({
+		address: '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE',
+		abi: fUsdcAbi,
+		functionName: 'mint',
+		args: [session?.userAddress, '1000000000000000000000000'],
+	});
+
+	const { config: configApprove } = usePrepareContractWrite({
+		address: erc20Address,
 		abi: fUsdcAbi,
 		functionName: 'approve',
-		args: [
-			'0xe25a838Bb996386eA450De3be2606b2f88eB408b',
-			'1000000000000000000000000000',
-		],
+		args: [contractAddress, '1000000000000000000000000000'],
 	});
 
-	const { isLoading, write } = useContractWrite(config);
+	const { isLoading: isLoadingMint, write: writeMint } =
+		useContractWrite(configMint);
+
+	const { isLoading: isLoadingApprove, write: writeApprove } =
+		useContractWrite(configApprove);
 
 	if (session?.isLoading) {
 		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;
@@ -91,19 +104,34 @@ export default function UserProfile() {
 							<span className="text-[#717171]">fUSDC</span>
 						</span>
 					</div>
-					<button
-						disabled={isLoading}
-						onClick={() => write?.()}
-						className={`text-white flex items-center hover:cursor-pointer ${
-							isLoading ? 'border-gray-50' : 'border-yagmi-pink'
-						} border-2 rounded-lg px-3 py-1 mt-3 self-start`}
-					>
-						{!isLoading ? (
-							'Approve fUSDC'
-						) : (
-							<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
-						)}
-					</button>
+					<div className="flex mt-3 space-x-2">
+						<button
+							disabled={isLoadingMint}
+							onClick={() => writeMint?.()}
+							className={`text-white flex items-center hover:cursor-pointer ${
+								isLoadingMint ? 'border-gray-50' : 'border-yagmi-pink'
+							} border-2 rounded-lg px-3 py-1`}
+						>
+							{!isLoadingMint ? (
+								'Mint fUSDC'
+							) : (
+								<Loading dimensions="min-w-[5rem]" className="w-6 h-6" />
+							)}
+						</button>
+						<button
+							disabled={isLoadingApprove}
+							onClick={() => writeApprove?.()}
+							className={`text-white flex items-center hover:cursor-pointer ${
+								isLoadingApprove ? 'border-gray-50' : 'border-yagmi-pink'
+							} border-2 rounded-lg px-3 py-1`}
+						>
+							{!isLoadingApprove ? (
+								'Approve fUSDC'
+							) : (
+								<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+							)}
+						</button>
+					</div>
 				</div>
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">
