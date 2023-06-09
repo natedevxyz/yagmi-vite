@@ -3,9 +3,10 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
 import { Loading } from '../components';
-import { useBalance } from 'wagmi';
+import { useBalance, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import maticLogo from '../assets/icons/matic.svg';
 import usdcLogo from '../assets/icons/usdc.svg';
+import fUsdcAbi from '../utils/fusdcAbi.json';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
@@ -19,8 +20,20 @@ export default function UserProfile() {
 		token: '0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
 	});
 
+	const { config } = usePrepareContractWrite({
+		address: '0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
+		abi: fUsdcAbi,
+		functionName: 'approve',
+		args: [
+			'0xe25a838Bb996386eA450De3be2606b2f88eB408b',
+			'1000000000000000000000000000',
+		],
+	});
+
+	const { isLoading, write } = useContractWrite(config);
+
 	if (session?.isLoading) {
-		return <Loading />;
+		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;
 	}
 
 	if (!session?.isLoggedIn) {
@@ -78,6 +91,19 @@ export default function UserProfile() {
 							<span className="text-[#717171]">fUSDC</span>
 						</span>
 					</div>
+					<button
+						disabled={isLoading}
+						onClick={() => write?.()}
+						className={`text-white flex items-center hover:cursor-pointer ${
+							isLoading ? 'border-gray-50' : 'border-yagmi-pink'
+						} border-2 rounded-lg px-3 py-1 mt-3 self-start`}
+					>
+						{!isLoading ? (
+							'Approve fUSDC'
+						) : (
+							<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+						)}
+					</button>
 				</div>
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">

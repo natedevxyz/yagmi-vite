@@ -1,0 +1,1127 @@
+[
+	{
+		"type": "constructor",
+		"name": "",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "adminWallet",
+				"internalType": "address"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "event",
+		"name": "BurnOpen",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "timestamp",
+				"indexed": true,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "CanceledSponsorship",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "sponsor",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "champion",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "ClaimedByBurn",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "investor",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenAmount",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "pay",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "interests",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "ClaimedDeposit",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "sponsor",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "depositAmount",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "ClaimedDonations",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "champion",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "claimedPay",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "claimedInterests",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "LoanWithdrawn",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "champion",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "timestamp",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "amount",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "MintOpen",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "NewChampion",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "sponsor",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "champion",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "depositAmount",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "NewInterestProportion",
+		"inputs": [
+			{
+				"type": "uint16",
+				"name": "oldInterestProportion",
+				"indexed": true,
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "newInterestProportion",
+				"indexed": true,
+				"internalType": "uint16"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "NewSponsor",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "sponsor",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint16",
+				"name": "ratio",
+				"indexed": true,
+				"internalType": "uint16"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "RecoveredByBurn",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "investor",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenAmount",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "pay",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "ReturnedPayment",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "champion",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint16",
+				"name": "payment",
+				"indexed": true,
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint256",
+				"name": "pay",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "interests",
+				"indexed": false,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "RoleAdminChanged",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"indexed": true,
+				"internalType": "bytes32"
+			},
+			{
+				"type": "bytes32",
+				"name": "previousAdminRole",
+				"indexed": true,
+				"internalType": "bytes32"
+			},
+			{
+				"type": "bytes32",
+				"name": "newAdminRole",
+				"indexed": true,
+				"internalType": "bytes32"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "RoleGranted",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"indexed": true,
+				"internalType": "bytes32"
+			},
+			{
+				"type": "address",
+				"name": "account",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "sender",
+				"indexed": true,
+				"internalType": "address"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "RoleRevoked",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"indexed": true,
+				"internalType": "bytes32"
+			},
+			{
+				"type": "address",
+				"name": "account",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "sender",
+				"indexed": true,
+				"internalType": "address"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "ThresholdMet",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"indexed": true,
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"anonymous": false
+	},
+	{
+		"type": "function",
+		"name": "CHAMPION",
+		"inputs": [],
+		"outputs": [
+			{
+				"type": "bytes32",
+				"name": "",
+				"internalType": "bytes32"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "DEFAULT_ADMIN_ROLE",
+		"inputs": [],
+		"outputs": [
+			{
+				"type": "bytes32",
+				"name": "",
+				"internalType": "bytes32"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "SPONSOR",
+		"inputs": [],
+		"outputs": [
+			{
+				"type": "bytes32",
+				"name": "",
+				"internalType": "bytes32"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "addSponsor",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "sponsor",
+				"internalType": "address"
+			},
+			{
+				"type": "uint16",
+				"name": "ratio",
+				"internalType": "uint16"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "amountsOwed",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "timestamp",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint16",
+				"name": "payment",
+				"internalType": "uint16"
+			}
+		],
+		"outputs": [
+			{
+				"type": "uint256",
+				"name": "pay",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "interests",
+				"internalType": "uint256"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "burnToClaim",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "burnToRecover",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "cancelSponsorship",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "checkUpkeep",
+		"inputs": [
+			{
+				"type": "bytes",
+				"name": "",
+				"internalType": "bytes"
+			}
+		],
+		"outputs": [
+			{
+				"type": "bool",
+				"name": "upkeepNeeded",
+				"internalType": "bool"
+			},
+			{
+				"type": "bytes",
+				"name": "performData",
+				"internalType": "bytes"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "claimDeposit",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "claimDonations",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "currentId",
+		"inputs": [],
+		"outputs": [
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "getRoleAdmin",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"internalType": "bytes32"
+			}
+		],
+		"outputs": [
+			{
+				"type": "bytes32",
+				"name": "",
+				"internalType": "bytes32"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "grantRole",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"internalType": "bytes32"
+			},
+			{
+				"type": "address",
+				"name": "account",
+				"internalType": "address"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "hasRole",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"internalType": "bytes32"
+			},
+			{
+				"type": "address",
+				"name": "account",
+				"internalType": "address"
+			}
+		],
+		"outputs": [
+			{
+				"type": "bool",
+				"name": "",
+				"internalType": "bool"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "interestProportion",
+		"inputs": [],
+		"outputs": [
+			{
+				"type": "uint16",
+				"name": "",
+				"internalType": "uint16"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "mint",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "id",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "amount",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "openMint",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "performUpkeep",
+		"inputs": [
+			{
+				"type": "bytes",
+				"name": "",
+				"internalType": "bytes"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "proposeChampion",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "champion",
+				"internalType": "address"
+			},
+			{
+				"type": "uint32",
+				"name": "maxSupply",
+				"internalType": "uint32"
+			},
+			{
+				"type": "uint32",
+				"name": "apy",
+				"internalType": "uint32"
+			},
+			{
+				"type": "uint16",
+				"name": "paymentFreqInDays",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "numberOfPayments",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint256",
+				"name": "price",
+				"internalType": "uint256"
+			},
+			{
+				"type": "address",
+				"name": "erc20",
+				"internalType": "address"
+			},
+			{
+				"type": "uint16",
+				"name": "daysToFirstPayment",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "maxMintDays",
+				"internalType": "uint16"
+			}
+		],
+		"outputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "renounceRole",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"internalType": "bytes32"
+			},
+			{
+				"type": "address",
+				"name": "account",
+				"internalType": "address"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "returnPayment",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "revokeRole",
+		"inputs": [
+			{
+				"type": "bytes32",
+				"name": "role",
+				"internalType": "bytes32"
+			},
+			{
+				"type": "address",
+				"name": "account",
+				"internalType": "address"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "setInterestProportion",
+		"inputs": [
+			{
+				"type": "uint16",
+				"name": "newInterestProportion",
+				"internalType": "uint16"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "setURI",
+		"inputs": [
+			{
+				"type": "string",
+				"name": "newuri",
+				"internalType": "string"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "sponsorAvailableBalance",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "",
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "",
+				"internalType": "address"
+			}
+		],
+		"outputs": [
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "sponsorLockedBalance",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "",
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "",
+				"internalType": "address"
+			}
+		],
+		"outputs": [
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "sponsorsRatio",
+		"inputs": [
+			{
+				"type": "address",
+				"name": "",
+				"internalType": "address"
+			}
+		],
+		"outputs": [
+			{
+				"type": "uint16",
+				"name": "",
+				"internalType": "uint16"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "supportsInterface",
+		"inputs": [
+			{
+				"type": "bytes4",
+				"name": "interfaceId",
+				"internalType": "bytes4"
+			}
+		],
+		"outputs": [
+			{
+				"type": "bool",
+				"name": "",
+				"internalType": "bool"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "tokens",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [
+			{
+				"type": "address",
+				"name": "champion",
+				"internalType": "address"
+			},
+			{
+				"type": "uint32",
+				"name": "maxSupply",
+				"internalType": "uint32"
+			},
+			{
+				"type": "uint32",
+				"name": "apy",
+				"internalType": "uint32"
+			},
+			{
+				"type": "uint16",
+				"name": "interestProportion",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "ratio",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint256",
+				"name": "price",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "mintStart",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "loanTaken",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "interestsAccrued",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "amountReturned",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "amountClaimed",
+				"internalType": "uint256"
+			},
+			{
+				"type": "address",
+				"name": "sponsor",
+				"internalType": "address"
+			},
+			{
+				"type": "address",
+				"name": "erc20",
+				"internalType": "address"
+			},
+			{
+				"type": "uint16",
+				"name": "maxMintDays",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "daysToFirstPayment",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "paymentFreqInDays",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "numberOfPayments",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint16",
+				"name": "paymentsDone",
+				"internalType": "uint16"
+			},
+			{
+				"type": "uint8",
+				"name": "status",
+				"internalType": "enum YAGMIStatus"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "unmetThreshold",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			},
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [
+			{
+				"type": "uint256",
+				"name": "",
+				"internalType": "uint256"
+			}
+		],
+		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "withdrawLoan",
+		"inputs": [
+			{
+				"type": "uint256",
+				"name": "tokenId",
+				"internalType": "uint256"
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	},
+	{
+		"type": "function",
+		"name": "yagmi",
+		"inputs": [],
+		"outputs": [
+			{
+				"type": "address",
+				"name": "",
+				"internalType": "contract YAGMI"
+			}
+		],
+		"stateMutability": "view"
+	}
+]

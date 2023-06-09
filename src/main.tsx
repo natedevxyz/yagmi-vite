@@ -140,7 +140,11 @@ function Root() {
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-[#1D1D1D]">
 			<Header />
-			{navigation.state === 'loading' ? <Loading /> : <Outlet />}
+			{navigation.state === 'loading' ? (
+				<Loading dimensions="min-h-[50vh]" className="w-12 h-12" />
+			) : (
+				<Outlet />
+			)}
 		</div>
 	);
 }

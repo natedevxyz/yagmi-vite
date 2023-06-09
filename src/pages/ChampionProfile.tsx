@@ -15,7 +15,7 @@ export default function ChampionProfile() {
 	const query = useLoaderData() as Data;
 
 	if (session?.isLoading) {
-		return <Loading />;
+		return <Loading className="w-12 h-12" dimensions="min-h-[50vh]" />;
 	}
 
 	return (

@@ -1,19 +1,123 @@
-import { Fragment, useContext } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
 import { ActionButton, Loading } from '../components';
 import { Link, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { Dialog } from '@headlessui/react';
+import { useForm } from 'react-hook-form';
+import { useContractWrite } from 'wagmi';
+import yagmiControllerAbi from '../utils/yagmiControllerAbi.json';
 
 export default function Dashboard() {
 	const session = useContext(SessionContext);
 	const query = useLoaderData() as any;
+	const [modalOpen, setModalOpen] = useState(false);
+	const { register, handleSubmit } = useForm();
+
+	const { isLoading, write } = useContractWrite({
+		address: '0xe25a838Bb996386eA450De3be2606b2f88eB408b',
+		abi: yagmiControllerAbi,
+		functionName: 'proposeChampion',
+	});
+
+	const onSubmit = (data: any) => {
+		write({
+			args: [
+				data.championAddress,
+				data.nftSupply,
+				(data.apy * 1000000).toString(),
+				'30',
+				data.installments,
+				(data.nftPrice * 1000000000000000000).toString(),
+				'0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
+				data.gracePeriod,
+				'30',
+			],
+		});
+	};
 
 	if (session?.isLoading) {
-		return <Loading />;
+		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;
 	}
 
 	return (
 		<>
+			{modalOpen && (
+				<Dialog
+					open={modalOpen}
+					onClose={() => setModalOpen(false)}
+					className="relative"
+				>
+					<div className="fixed inset-0 bg-black/30"></div>
+					<div className="fixed inset-0 flex items-center justify-center p-4">
+						<Dialog.Panel className="flex flex-col bg-yagmi-blue rounded-xl border-[1px] border-white p-10">
+							<Dialog.Title className="text-white font-chromate text-5xl text-center mb-10">
+								Champion Proposal
+							</Dialog.Title>
+							<form
+								onSubmit={handleSubmit(onSubmit)}
+								className="flex flex-col space-y-2"
+							>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Champion Address</h4>
+									<input
+										{...register('championAddress', { required: true })}
+										className="rounded-sm min-w-[26rem] pl-1"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">NFT Supply</h4>
+									<input
+										type="number"
+										{...register('nftSupply', { required: true, min: 1 })}
+										className="rounded-sm max-w-[4rem] text-center"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">APY</h4>
+									<input
+										type="number"
+										{...register('apy', { required: true, min: 0, max: 100 })}
+										className="rounded-sm max-w-[4rem] text-center"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Number of installments</h4>
+									<input
+										type="number"
+										{...register('installments', { required: true, min: 1 })}
+										className="rounded-sm max-w-[4rem] text-center"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Price of each NFT</h4>
+									<input
+										type="number"
+										{...register('nftPrice', { required: true, min: 10 })}
+										className="rounded-sm max-w-[4rem] text-center"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Grace period (days)</h4>
+									<input
+										type="number"
+										{...register('gracePeriod', {
+											required: true,
+											min: 0,
+											max: 365,
+										})}
+										className="rounded-sm max-w-[4rem] text-center"
+									/>
+								</div>
+								<input
+									type="submit"
+									className="bg-yagmi-pink py-2 px-8 text-lg font-medium border-black border-2 hover:cursor-pointer self-center"
+								/>
+							</form>
+						</Dialog.Panel>
+					</div>
+				</Dialog>
+			)}
 			<Link to="/" className="ml-[10%] self-start mb-4">
 				<div className="flex items-center text-white text-lg hover:underline">
 					<ArrowLeftIcon height="1rem" width="1rem" className="mr-1" />
@@ -47,8 +151,15 @@ export default function Dashboard() {
 							the ratio of collateral required will decrease.
 						</p>
 					</div>
-					<ActionButton className="self-start px-7 py-1 text-lg mb-2">
-						Propose now
+					<ActionButton
+						onClick={() => setModalOpen(true)}
+						className="self-start px-7 py-1 text-lg mb-2"
+					>
+						{!isLoading ? (
+							'Propose now'
+						) : (
+							<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+						)}
 					</ActionButton>
 				</div>
 			</div>
