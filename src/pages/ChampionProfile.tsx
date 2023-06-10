@@ -1,8 +1,12 @@
 import { Link, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
 import { Loading, ActionButton } from '../components';
+import { Dialog } from '@headlessui/react';
+import { useForm } from 'react-hook-form';
+import { useContractWrite } from 'wagmi';
+import yagmiControllerAbi from '../utils/yagmiControllerAbi.json';
 
 interface Data {
 	championData: any;
@@ -10,9 +14,31 @@ interface Data {
 	championAchievement: any;
 }
 
+const contractAddress = '0x4274e51D378f84B578b17c4c51732fba2f2Ff676';
+
 export default function ChampionProfile() {
 	const session = useContext(SessionContext);
 	const query = useLoaderData() as Data;
+	const [modalOpen, setModalOpen] = useState(false);
+	const { register, handleSubmit } = useForm();
+
+	const { isLoading: isLoadingMint, write: writeMint } = useContractWrite({
+		address: contractAddress,
+		abi: yagmiControllerAbi,
+		functionName: 'mint',
+	});
+
+	const { isLoading: isLoadingBurn, write: writeBurn } = useContractWrite({
+		address: contractAddress,
+		abi: yagmiControllerAbi,
+		functionName: 'burnToRecover',
+	});
+
+	const onSubmit = (data: any) => {
+		writeMint({
+			args: [query.championData.data[0].token_id, data.amount],
+		});
+	};
 
 	if (session?.isLoading) {
 		return <Loading className="w-12 h-12" dimensions="min-h-[50vh]" />;
@@ -20,6 +46,47 @@ export default function ChampionProfile() {
 
 	return (
 		<>
+			{modalOpen && (
+				<Dialog
+					open={modalOpen}
+					onClose={() => setModalOpen(false)}
+					className="relative"
+				>
+					<div className="fixed inset-0 bg-black/30"></div>
+					<div className="fixed inset-0 flex items-center justify-center p-4">
+						<Dialog.Panel className="flex flex-col bg-yagmi-blue rounded-xl border-[1px] border-white p-10">
+							<Dialog.Title className="text-white font-chromate text-5xl text-center mb-10">
+								Buy {query.championData.data[0].name}'s NFT
+							</Dialog.Title>
+							<form
+								onSubmit={handleSubmit(onSubmit)}
+								className="flex flex-col space-y-2"
+							>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Amount</h4>
+									<input
+										type="number"
+										{...register('amount', {
+											required: true,
+											min: 0,
+											max: Number(query.championData.data[0].total_nfts),
+										})}
+										className="rounded-sm max-w-[3rem] pl-1"
+									/>
+								</div>
+								<h4 className="text-white mr-3 text-center">
+									${query.championData.data[0].nft_price} each -{' '}
+									{query.championData.data[0].apy}% APY
+								</h4>
+								<input
+									type="submit"
+									className="bg-yagmi-pink py-1 px-8 text-lg font-medium border-black border-2 hover:cursor-pointer self-center"
+								/>
+							</form>
+						</Dialog.Panel>
+					</div>
+				</Dialog>
+			)}
 			<Link to="/marketplace" className="ml-[10%] self-start mb-4">
 				<div className="flex items-center text-white text-lg hover:underline">
 					<ArrowLeftIcon height="1rem" width="1rem" className="mr-1" />
@@ -65,18 +132,39 @@ export default function ChampionProfile() {
 								<ArrowRightIcon height="1rem" width="1rem" className="ml-2" />
 							</a>
 						</div>
-						<ActionButton className="px-6 py-1 mr-6 mb-2">
-							Buy NFT now!
-						</ActionButton>
+						<div className="flex">
+							<ActionButton
+								onClick={() => setModalOpen(true)}
+								className="px-6 py-1 mr-6 mb-2"
+							>
+								{!isLoadingMint ? (
+									'Buy NFT now!'
+								) : (
+									<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+								)}
+							</ActionButton>
+							<ActionButton
+								onClick={() =>
+									writeBurn({ args: [query.championData.data[0].token_id] })
+								}
+								className="px-6 py-1 mr-6 mb-2"
+							>
+								{!isLoadingBurn ? (
+									'Burn and withdraw'
+								) : (
+									<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+								)}
+							</ActionButton>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div className="flex min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl py-4 px-4 justify-between mb-7">
-				<div className="flex space-x-4">
+				<div className="flex w-full space-x-4">
 					{query.championMilestones.data.map((milestone: any) => (
 						<div
 							key={milestone.id}
-							className={`bg-white flex flex-col h-full w-[30%] p-4 rounded-lg justify-between ${
+							className={`bg-white flex flex-col h-full w-[25%] p-4 rounded-lg justify-between ${
 								milestone.completed === true && 'opacity-50'
 							}`}
 						>

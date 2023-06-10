@@ -2,19 +2,25 @@ import { Link, Navigate, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
 import SessionContext from '../context/user-session';
-import { Loading } from '../components';
+import { Loading, ActionButton } from '../components';
 import { useBalance, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import maticLogo from '../assets/icons/matic.svg';
 import usdcLogo from '../assets/icons/usdc.svg';
 import fUsdcAbi from '../utils/fUsdcAbi.json';
+import yagmiControllerAbi from '../utils/yagmiControllerAbi.json';
 
-const contractAddress = '0xe25a838Bb996386eA450De3be2606b2f88eB408b';
+interface Data {
+	collection: any;
+	champion: any;
+}
+
+const contractAddress = '0x4274e51D378f84B578b17c4c51732fba2f2Ff676';
 const erc20Address = '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE';
 
 export default function UserProfile() {
 	const session = useContext(SessionContext);
 	const [avatarLoaded, setAvatarLoaded] = useState(false);
-	const collection = useLoaderData() as Array<any>;
+	const query = useLoaderData() as Data;
 	const { data: matic } = useBalance({
 		address: session?.userAddress as `0x${string}`,
 		watch: true,
@@ -26,7 +32,7 @@ export default function UserProfile() {
 	});
 
 	const { config: configMint } = usePrepareContractWrite({
-		address: '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE',
+		address: erc20Address,
 		abi: fUsdcAbi,
 		functionName: 'mint',
 		args: [session?.userAddress, '1000000000000000000000000'],
@@ -44,6 +50,21 @@ export default function UserProfile() {
 
 	const { isLoading: isLoadingApprove, write: writeApprove } =
 		useContractWrite(configApprove);
+
+	const { isLoading: isLoadingWithdraw, write: writeWithdraw } =
+		useContractWrite({
+			address: contractAddress,
+			abi: yagmiControllerAbi,
+			functionName: 'withdrawLoan',
+		});
+
+	const { isLoading: isLoadingPayment, write: writePayment } = useContractWrite(
+		{
+			address: contractAddress,
+			abi: yagmiControllerAbi,
+			functionName: 'returnPayment',
+		}
+	);
 
 	if (session?.isLoading) {
 		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;
@@ -133,14 +154,46 @@ export default function UserProfile() {
 						</button>
 					</div>
 				</div>
+				{query.champion.data.length && (
+					<div className="flex flex-col justify-evenly p-10 ml-10">
+						<ActionButton
+							onClick={() =>
+								writeWithdraw({
+									args: [query.champion.data[0].token_id],
+								})
+							}
+							className="px-6 py-1 mr-6 mb-2"
+						>
+							{!isLoadingWithdraw ? (
+								'Withdraw Loan'
+							) : (
+								<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+							)}
+						</ActionButton>
+						<ActionButton
+							onClick={() =>
+								writePayment({
+									args: [query.champion.data[0].token_id],
+								})
+							}
+							className="px-6 py-1 mr-6 mb-2"
+						>
+							{!isLoadingPayment ? (
+								'Make payment'
+							) : (
+								<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
+							)}
+						</ActionButton>
+					</div>
+				)}
 			</div>
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">
 				<h2 className="text-4xl text-white self-end mr-4">My NFTs</h2>
 				<div className="flex justify-between">
-					{collection.length > 0 ? (
+					{query.collection[0] && query.collection[0].length > 0 ? (
 						<>
 							<div className="flex space-x-4 mt-2">
-								{collection.slice(0, 4).map((nft: any) => (
+								{query.collection[0].slice(0, 4).map((nft: any) => (
 									<div key={nft.id.tokenId}>
 										<img
 											src={nft.media[0].gateway}

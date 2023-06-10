@@ -502,7 +502,7 @@
 			},
 			{
 				"type": "uint256",
-				"name": "timestamp",
+				"name": "",
 				"internalType": "uint256"
 			},
 			{
@@ -645,6 +645,13 @@
 			}
 		],
 		"stateMutability": "view"
+	},
+	{
+		"type": "function",
+		"name": "grabAdmin",
+		"inputs": [],
+		"outputs": [],
+		"stateMutability": "nonpayable"
 	},
 	{
 		"type": "function",
@@ -1033,11 +1040,6 @@
 			},
 			{
 				"type": "address",
-				"name": "sponsor",
-				"internalType": "address"
-			},
-			{
-				"type": "address",
 				"name": "erc20",
 				"internalType": "address"
 			},
@@ -1070,6 +1072,16 @@
 				"type": "uint8",
 				"name": "status",
 				"internalType": "enum YAGMIStatus"
+			},
+			{
+				"type": "bool",
+				"name": "claimedDeposit",
+				"internalType": "bool"
+			},
+			{
+				"type": "address",
+				"name": "sponsor",
+				"internalType": "address"
 			}
 		],
 		"stateMutability": "view"

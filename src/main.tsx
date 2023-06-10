@@ -65,10 +65,15 @@ const router = createBrowserRouter([
 					const collection = nfts.ownedNfts.filter(
 						(nft: any) =>
 							nft.contract.address ==
-							'0x7582177f9e536ab0b6c721e11f383c326f2ad1d5'
+							'0x40dcbd9d6f7a5f1c165421c9ecc3c58f6cf50410'
 					);
 
-					return collection;
+					const champion = await supabaseClient
+						.from('champions')
+						.select()
+						.eq('address', params.userAddress);
+
+					return { collection, champion };
 				},
 			},
 			{
@@ -122,7 +127,7 @@ const router = createBrowserRouter([
 					name,
 					address,
 					logo_url,
-					champions(id, name, address, token_id)
+					champions(id, name, address, token_id, total_nfts, nft_price, apy)
 					`
 						)
 						.eq('address', params.daoAddress);

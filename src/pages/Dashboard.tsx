@@ -5,8 +5,12 @@ import { Link, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
-import { useContractWrite } from 'wagmi';
+import { useContractWrite, useContractRead } from 'wagmi';
 import yagmiControllerAbi from '../utils/yagmiControllerAbi.json';
+import { supabaseClient } from '../utils';
+
+const contractAddress = '0x4274e51D378f84B578b17c4c51732fba2f2Ff676';
+const erc20Address = '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE';
 
 export default function Dashboard() {
 	const session = useContext(SessionContext);
@@ -14,14 +18,40 @@ export default function Dashboard() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const { register, handleSubmit } = useForm();
 
-	const { isLoading, write } = useContractWrite({
-		address: '0xe25a838Bb996386eA450De3be2606b2f88eB408b',
+	const { data: tokenId } = useContractRead({
+		address: contractAddress,
 		abi: yagmiControllerAbi,
-		functionName: 'proposeChampion',
+		functionName: 'currentId',
 	});
 
-	const onSubmit = (data: any) => {
-		write({
+	const { isLoading: isLoadingPropose, write: writePropose } = useContractWrite(
+		{
+			address: contractAddress,
+			abi: yagmiControllerAbi,
+			functionName: 'proposeChampion',
+		}
+	);
+
+	const { isLoading: isLoadingOpen, write: writeOpen } = useContractWrite({
+		address: contractAddress,
+		abi: yagmiControllerAbi,
+		functionName: 'openMint',
+	});
+
+	const { isLoading: isLoadingCancel, write: writeCancel } = useContractWrite({
+		address: contractAddress,
+		abi: yagmiControllerAbi,
+		functionName: 'cancelSponsorship',
+	});
+
+	const { isLoading: isLoadingClaim, write: writeClaim } = useContractWrite({
+		address: contractAddress,
+		abi: yagmiControllerAbi,
+		functionName: 'claimDeposit',
+	});
+
+	const onSubmit = async (data: any) => {
+		writePropose({
 			args: [
 				data.championAddress,
 				data.nftSupply,
@@ -29,10 +59,38 @@ export default function Dashboard() {
 				'30',
 				data.installments,
 				(data.nftPrice * 1000000000000000000).toString(),
-				'0x66288967c129D4D7b92294dA8d55fa58838dDd9A',
+				erc20Address,
 				data.gracePeriod,
 				'30',
 			],
+		});
+
+		await supabaseClient.from('champions').insert({
+			name: data.championName,
+			dao: 1,
+			avatar_url: data.avatarUrl,
+			address: data.championAddress,
+			bio: data.championBio,
+			ens: data.championEns,
+			token_id: Number(tokenId).toString(),
+			total_nfts: data.nftSupply,
+			nft_price: data.nftPrice,
+			apy: data.apy,
+		});
+
+		await supabaseClient.from('achievements').insert({
+			title: 'Placeholder Title',
+			description: 'Placeholder description',
+			image_url:
+				'https://cdn.dribbble.com/userupload/3640061/file/original-210dc6cee62c8b794c8d7c6c52c0aac5.png?compress=1&resize=1200x900',
+			tags: ['Design', 'UI/UX'],
+			champion_id: Number(query.data[0].champions[0].id) + 1,
+		});
+
+		await supabaseClient.from('milestones').insert({
+			champion_id: Number(query.data[0].champions[0].id) + 1,
+			title: 'Placeholder Milestone',
+			date: new Date(2023, 12, 31).toISOString(),
 		});
 	};
 
@@ -109,9 +167,37 @@ export default function Dashboard() {
 										className="rounded-sm max-w-[4rem] text-center"
 									/>
 								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Name</h4>
+									<input
+										{...register('championName', { required: true })}
+										className="rounded-sm min-w-[26rem] pl-1"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Avatar URL</h4>
+									<input
+										{...register('avatarUrl', { required: true })}
+										className="rounded-sm min-w-[26rem] pl-1"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">Bio</h4>
+									<input
+										{...register('championBio', { required: true })}
+										className="rounded-sm min-w-[26rem] pl-1"
+									/>
+								</div>
+								<div className="flex justify-between">
+									<h4 className="text-white mr-3">ENS</h4>
+									<input
+										{...register('championEns', { required: true })}
+										className="rounded-sm min-w-[26rem] pl-1"
+									/>
+								</div>
 								<input
 									type="submit"
-									className="bg-yagmi-pink py-2 px-8 text-lg font-medium border-black border-2 hover:cursor-pointer self-center"
+									className="bg-yagmi-pink py-1 px-8 text-lg font-medium border-black border-2 hover:cursor-pointer self-center"
 								/>
 							</form>
 						</Dialog.Panel>
@@ -155,7 +241,7 @@ export default function Dashboard() {
 						onClick={() => setModalOpen(true)}
 						className="self-start px-7 py-1 text-lg mb-2"
 					>
-						{!isLoading ? (
+						{!isLoadingPropose ? (
 							'Propose now'
 						) : (
 							<Loading dimensions="min-w-[7rem]" className="w-6 h-6" />
@@ -166,7 +252,7 @@ export default function Dashboard() {
 			<h2 className="text-white font-chromate text-3xl self-start ml-[10%] mt-16 mb-10">
 				Manage Champions
 			</h2>
-			<div className="grid grid-cols-6 content-start min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl pt-4 pb-9 px-4 justify-between mb-7">
+			<div className="grid grid-cols-7 content-start min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl pt-4 pb-9 px-4 justify-between mb-7">
 				<h3 className="text-white font-medium text-xl text-center border-b-[1px] border-white max-h-[4rem] mt-5 pb-5">
 					Name
 				</h3>
@@ -177,13 +263,16 @@ export default function Dashboard() {
 					Tokens minted
 				</h3>
 				<h3 className="text-white font-medium text-xl text-center border-b-[1px] border-white max-h-[4rem] mt-5 pb-5">
-					Total Debt
+					Token price
 				</h3>
 				<h3 className="text-white font-medium text-xl text-center border-b-[1px] border-white max-h-[4rem] mt-5 pb-5">
-					Instalments
+					APY
 				</h3>
 				<h3 className="text-white font-medium text-xl text-center border-b-[1px] border-white max-h-[4rem] mt-5 pb-5">
 					Mint actions
+				</h3>
+				<h3 className="text-white font-medium text-xl text-center border-b-[1px] border-white max-h-[4rem] mt-5 pb-5">
+					Deposit
 				</h3>
 				{query.data[0].champions.map((champion: any) => (
 					<Fragment key={champion.id}>
@@ -202,20 +291,46 @@ export default function Dashboard() {
 							)}`}
 						</Link>
 						<span className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4">
-							{champion.name}
+							{champion.total_nfts}
 						</span>
 						<span className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4">
-							{champion.name}
+							{champion.nft_price}
 						</span>
 						<span className="text-white max-h-[4rem] border-b-[1px] border-white text-center py-4">
-							{champion.name}
+							{champion.apy}
 						</span>
 						<div className="flex items-center justify-center space-x-2 text-white max-h-[4rem] border-b-[1px] border-white py-1">
-							<button className="bg-yagmi-aqua text-black px-3 py-1">
-								Open
+							<button
+								onClick={() => writeOpen({ args: [champion.token_id] })}
+								className="bg-yagmi-aqua text-black px-3 py-1"
+							>
+								{!isLoadingOpen ? (
+									'Open'
+								) : (
+									<Loading dimensions="min-w-[2rem]" className="w-6 h-6" />
+								)}
 							</button>
-							<button className="bg-[#FF6F61] text-black px-3 py-1">
-								Cancel
+							<button
+								onClick={() => writeCancel({ args: [champion.token_id] })}
+								className="bg-[#FF6F61] text-black px-3 py-1"
+							>
+								{!isLoadingCancel ? (
+									'Cancel'
+								) : (
+									<Loading dimensions="min-w-[2rem]" className="w-6 h-6" />
+								)}
+							</button>
+						</div>
+						<div className="flex items-center justify-center space-x-2 text-white max-h-[4rem] border-b-[1px] border-white py-1">
+							<button
+								onClick={() => writeClaim({ args: [champion.token_id] })}
+								className="bg-yagmi-pink text-black px-3 py-1"
+							>
+								{!isLoadingClaim ? (
+									'Claim'
+								) : (
+									<Loading dimensions="min-w-[2rem]" className="w-6 h-6" />
+								)}
 							</button>
 						</div>
 					</Fragment>
