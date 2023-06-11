@@ -65,18 +65,21 @@ export default function Dashboard() {
 			],
 		});
 
-		await supabaseClient.from('champions').insert({
-			name: data.championName,
-			dao: 1,
-			avatar_url: data.avatarUrl,
-			address: data.championAddress,
-			bio: data.championBio,
-			ens: data.championEns,
-			token_id: Number(tokenId).toString(),
-			total_nfts: data.nftSupply,
-			nft_price: data.nftPrice,
-			apy: data.apy,
-		});
+		const championData = (await supabaseClient
+			.from('champions')
+			.insert({
+				name: data.championName,
+				dao: 1,
+				avatar_url: data.avatarUrl,
+				address: data.championAddress,
+				bio: data.championBio,
+				ens: data.championEns,
+				token_id: Number(tokenId).toString(),
+				total_nfts: data.nftSupply,
+				nft_price: data.nftPrice,
+				apy: data.apy,
+			})
+			.select()) as any;
 
 		await supabaseClient.from('achievements').insert({
 			title: 'Placeholder Title',
@@ -84,13 +87,13 @@ export default function Dashboard() {
 			image_url:
 				'https://cdn.dribbble.com/userupload/3640061/file/original-210dc6cee62c8b794c8d7c6c52c0aac5.png?compress=1&resize=1200x900',
 			tags: ['Design', 'UI/UX'],
-			champion_id: Number(query.data[0].champions[0].id) + 1,
+			champion_id: championData.data[0].id.toString(),
 		});
 
 		await supabaseClient.from('milestones').insert({
-			champion_id: Number(query.data[0].champions[0].id) + 1,
+			champion_id: championData.data[0].id.toString(),
 			title: 'Placeholder Milestone',
-			date: new Date(2023, 12, 31).toISOString(),
+			deadline: new Date(2023, 12, 31).toISOString(),
 		});
 	};
 
