@@ -1,6 +1,6 @@
 import { Link, useLoaderData } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import SessionContext from '../context/user-session';
 import { Loading, ActionButton } from '../components';
 import { Dialog } from '@headlessui/react';
@@ -14,13 +14,17 @@ interface Data {
 	championAchievement: any;
 }
 
-const contractAddress = '0x4274e51D378f84B578b17c4c51732fba2f2Ff676';
+const contractAddress = '0x71ac01342909DFb970E536EB8bB0DDA41C65F345';
 
 export default function ChampionProfile() {
 	const session = useContext(SessionContext);
 	const query = useLoaderData() as Data;
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit, reset, formState } = useForm({
+		defaultValues: {
+			amount: '',
+		},
+	});
 
 	const { isLoading: isLoadingMint, write: writeMint } = useContractWrite({
 		address: contractAddress,
@@ -39,6 +43,12 @@ export default function ChampionProfile() {
 			args: [query.championData.data[0].token_id, data.amount],
 		});
 	};
+
+	useEffect(() => {
+		if (formState.isSubmitSuccessful) {
+			reset();
+		}
+	}, [formState, reset]);
 
 	if (session?.isLoading) {
 		return <Loading className="w-12 h-12" dimensions="min-h-[50vh]" />;

@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import SessionContext from '../context/user-session';
 import { ActionButton, Loading } from '../components';
 import { Link, useLoaderData } from 'react-router-dom';
@@ -9,14 +9,27 @@ import { useContractWrite, useContractRead } from 'wagmi';
 import yagmiControllerAbi from '../utils/yagmiControllerAbi.json';
 import { supabaseClient } from '../utils';
 
-const contractAddress = '0x4274e51D378f84B578b17c4c51732fba2f2Ff676';
+const contractAddress = '0x71ac01342909DFb970E536EB8bB0DDA41C65F345';
 const erc20Address = '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE';
 
 export default function Dashboard() {
 	const session = useContext(SessionContext);
 	const query = useLoaderData() as any;
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit, reset, formState } = useForm({
+		defaultValues: {
+			championAddress: '',
+			nftSupply: '',
+			apy: '',
+			installments: '',
+			nftPrice: '',
+			gracePeriod: '',
+			championName: '',
+			avatarUrl: '',
+			championBio: '',
+			championEns: '',
+		},
+	});
 
 	const { data: tokenId } = useContractRead({
 		address: contractAddress,
@@ -96,6 +109,12 @@ export default function Dashboard() {
 			deadline: new Date(2023, 12, 31).toISOString(),
 		});
 	};
+
+	useEffect(() => {
+		if (formState.isSubmitSuccessful) {
+			reset();
+		}
+	}, [formState, reset]);
 
 	if (session?.isLoading) {
 		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;

@@ -14,7 +14,7 @@ interface Data {
 	champion: any;
 }
 
-const contractAddress = '0x4274e51D378f84B578b17c4c51732fba2f2Ff676';
+const contractAddress = '0x71ac01342909DFb970E536EB8bB0DDA41C65F345';
 const erc20Address = '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE';
 
 export default function UserProfile() {
