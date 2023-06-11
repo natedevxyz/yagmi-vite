@@ -154,7 +154,7 @@ export default function UserProfile() {
 						</button>
 					</div>
 				</div>
-				{query.champion.data.length && (
+				{query.champion.data.length > 0 && (
 					<div className="flex flex-col justify-evenly p-10 ml-10">
 						<ActionButton
 							onClick={() =>
