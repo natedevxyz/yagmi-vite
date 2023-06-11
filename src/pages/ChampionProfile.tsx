@@ -35,7 +35,7 @@ export default function ChampionProfile() {
 	const { isLoading: isLoadingBurn, write: writeBurn } = useContractWrite({
 		address: contractAddress,
 		abi: yagmiControllerAbi,
-		functionName: 'burnToRecover',
+		functionName: 'burnToClaim',
 	});
 
 	const onSubmit = (data: any) => {
