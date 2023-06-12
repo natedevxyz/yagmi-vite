@@ -66,6 +66,8 @@ export default function UserProfile() {
 		}
 	);
 
+	console.log(query.collection[0].length);
+
 	if (session?.isLoading) {
 		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;
 	}
@@ -190,10 +192,10 @@ export default function UserProfile() {
 			<div className="flex flex-col min-w-[80%] min-h-[40vh] border-[1px] border-white rounded-2xl p-4">
 				<h2 className="text-4xl text-white self-end mr-4">My NFTs</h2>
 				<div className="flex justify-between">
-					{query.collection[0] && query.collection[0].length > 0 ? (
+					{query.collection[0] ? (
 						<>
 							<div className="flex space-x-4 mt-2">
-								{query.collection[0].slice(0, 4).map((nft: any) => (
+								{query.collection.slice(0, 4).map((nft: any) => (
 									<div key={nft.id.tokenId}>
 										<img
 											src={nft.media[0].gateway}
