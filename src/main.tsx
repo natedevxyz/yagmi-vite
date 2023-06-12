@@ -65,7 +65,7 @@ const router = createBrowserRouter([
 					const collection = nfts.ownedNfts.filter(
 						(nft: any) =>
 							nft.contract.address ===
-							'0x5afb122e31d5de2e7183f081362a9d808894c603'
+							'0x34BbCD696c59038219CcB893e863C551Cce9Aca2'
 					);
 
 					const champion = await supabaseClient

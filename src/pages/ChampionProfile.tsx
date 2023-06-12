@@ -14,7 +14,7 @@ interface Data {
 	championAchievement: any;
 }
 
-const contractAddress = '0x71ac01342909DFb970E536EB8bB0DDA41C65F345';
+const contractAddress = '0xe095c1dF9Ac9C5531A9be4824B88A0327191e42F';
 
 export default function ChampionProfile() {
 	const session = useContext(SessionContext);

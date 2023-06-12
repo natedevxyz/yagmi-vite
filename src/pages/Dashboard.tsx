@@ -9,7 +9,7 @@ import { useContractWrite, useContractRead } from 'wagmi';
 import yagmiControllerAbi from '../utils/yagmiControllerAbi.json';
 import { supabaseClient } from '../utils';
 
-const contractAddress = '0x71ac01342909DFb970E536EB8bB0DDA41C65F345';
+const contractAddress = '0xe095c1dF9Ac9C5531A9be4824B88A0327191e42F';
 const erc20Address = '0x6826E9F211D3EfA2520561Ba9773F07B1488e8DE';
 
 export default function Dashboard() {
