@@ -66,8 +66,6 @@ export default function UserProfile() {
 		}
 	);
 
-	console.log(query.collection[0].length);
-
 	if (session?.isLoading) {
 		return <Loading dimensions="min-h-[50vh]" className="w-12 h-12" />;
 	}
