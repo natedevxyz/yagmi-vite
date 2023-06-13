@@ -74,6 +74,8 @@ export default function UserProfile() {
 		return <Navigate to="/" />;
 	}
 
+	console.log(query);
+
 	return (
 		<>
 			<Link to="/marketplace" className="ml-[10%] self-start mb-4">
